@@ -123,14 +123,14 @@ void MapActions(WebApplication app)
         if (!result.Succeeded)
             return Results.BadRequest(result.Errors);
 
-        //var jwt = new JwtBuilder()
-        //            .WithUserManager(userManager)
-        //            .WithJwtSettings(appJwtSettings.Value)
-        //            .WithEmail(user.Email)
-        //            .WithJwtClaims()
-        //            .WithUserClaims()
-        //            .WithUserRoles()
-        //            .BuildUserResponse();
+        var jwt = new JwtBuilder()
+                   .WithUserManager(userManager)
+                   .WithJwtSettings(appJwtSettings.Value)
+                   .WithEmail(user.Email)
+                   .WithJwtClaims()
+                   .WithUserClaims()
+                   .WithUserRoles()
+                   .BuildUserResponse();
 
         return Results.Ok($"O Usuário: {user.UserName} foi criado com sucesso!");
 
