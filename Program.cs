@@ -40,7 +40,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Api Minimalista",
         Description = "Esta é uma Api minimalista para testes.",
-        Contact = new OpenApiContact { Name = "Douglas Natan", Email = "douglas@douglas.com.br" },
+        Contact = new OpenApiContact { Name = "Douglas Natan", Email = "dnsg2006@gmail.com" },
         License = new OpenApiLicense { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
     });
 
