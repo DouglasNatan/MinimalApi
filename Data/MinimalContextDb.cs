@@ -11,7 +11,7 @@ namespace MinimalPilot.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Fornecedor>()
+        modelBuilder.Entity<Fornecedor>()
                 .HasKey(p => p.Id);
 
             modelBuilder.Entity<Fornecedor>()

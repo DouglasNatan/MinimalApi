@@ -80,6 +80,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "app v1"));
 }
 
 app.UseAuthConfiguration();
@@ -122,16 +123,16 @@ void MapActions(WebApplication app)
         if (!result.Succeeded)
             return Results.BadRequest(result.Errors);
 
-        var jwt = new JwtBuilder()
-                    .WithUserManager(userManager)
-                    .WithJwtSettings(appJwtSettings.Value)
-                    .WithEmail(user.Email)
-                    .WithJwtClaims()
-                    .WithUserClaims()
-                    .WithUserRoles()
-                    .BuildUserResponse();
+        //var jwt = new JwtBuilder()
+        //            .WithUserManager(userManager)
+        //            .WithJwtSettings(appJwtSettings.Value)
+        //            .WithEmail(user.Email)
+        //            .WithJwtClaims()
+        //            .WithUserClaims()
+        //            .WithUserRoles()
+        //            .BuildUserResponse();
 
-        return Results.Ok(jwt);
+        return Results.Ok($"O Usuário: {user.UserName} foi criado com sucesso!");
 
     }).ProducesValidationProblem()
       .Produces(StatusCodes.Status200OK)
@@ -154,10 +155,10 @@ void MapActions(WebApplication app)
         var result = await signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
 
         if (result.IsLockedOut)
-            return Results.BadRequest("Usuário bloqueado");
+            return Results.BadRequest("Usuário Bloqueado");
 
         if (!result.Succeeded)
-            return Results.BadRequest("Usuário ou senha inválidos");
+            return Results.BadRequest("Usuário ou Senha inválidos");
 
         var jwt = new JwtBuilder()
                     .WithUserManager(userManager)
