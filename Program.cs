@@ -97,7 +97,7 @@ app.Run();
 
 void MapActions(WebApplication app)
 {
-    app.MapGet("/", () => "Hello World! It's a minimalist API!!!").ExcludeFromDescription();    
+    app.MapGet("/", () => "Hello World! Esta é um API minimalista!!!").ExcludeFromDescription();    
 
     app.MapPost("/registro", [AllowAnonymous] async (
         SignInManager<IdentityUser> signInManager,
