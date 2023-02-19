@@ -40,7 +40,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Api Minimalista",
         Description = "Esta é uma Api minimalista para testes.",
-        Contact = new OpenApiContact { Name = "Douglas Natan", Email = "douglas@douglas.com.br" },
+        Contact = new OpenApiContact { Name = "Douglas Natan", Email = "dnsg2006@gmail.com" },
         License = new OpenApiLicense { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
     });
 
@@ -80,6 +80,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "app v1"));
 }
 
 app.UseAuthConfiguration();
@@ -96,7 +97,7 @@ app.Run();
 
 void MapActions(WebApplication app)
 {
-    app.MapGet("/", () => "Hello World! It's a minimalist API!!!").ExcludeFromDescription();    
+    app.MapGet("/", () => "Hello World! Esta é um API minimalista!!!").ExcludeFromDescription();    
 
     app.MapPost("/registro", [AllowAnonymous] async (
         SignInManager<IdentityUser> signInManager,
@@ -123,15 +124,15 @@ void MapActions(WebApplication app)
             return Results.BadRequest(result.Errors);
 
         var jwt = new JwtBuilder()
-                    .WithUserManager(userManager)
-                    .WithJwtSettings(appJwtSettings.Value)
-                    .WithEmail(user.Email)
-                    .WithJwtClaims()
-                    .WithUserClaims()
-                    .WithUserRoles()
-                    .BuildUserResponse();
+                   .WithUserManager(userManager)
+                   .WithJwtSettings(appJwtSettings.Value)
+                   .WithEmail(user.Email)
+                   .WithJwtClaims()
+                   .WithUserClaims()
+                   .WithUserRoles()
+                   .BuildUserResponse();
 
-        return Results.Ok(jwt);
+        return Results.Ok($"O Usuário: {user.UserName} foi criado com sucesso!");
 
     }).ProducesValidationProblem()
       .Produces(StatusCodes.Status200OK)
@@ -154,10 +155,10 @@ void MapActions(WebApplication app)
         var result = await signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
 
         if (result.IsLockedOut)
-            return Results.BadRequest("Usuário bloqueado");
+            return Results.BadRequest("Usuário Bloqueado");
 
         if (!result.Succeeded)
-            return Results.BadRequest("Usuário ou senha inválidos");
+            return Results.BadRequest("Usuário ou Senha inválidos");
 
         var jwt = new JwtBuilder()
                     .WithUserManager(userManager)
