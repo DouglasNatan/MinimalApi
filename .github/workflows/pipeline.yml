@@ -1,7 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: .NET Core CI
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: douglasnatanminimalapi   # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '7.0'           # set this to the dot net version to use
+  DOTNET_VERSION: '7.0.x'           # set this to the dot net version to use
 
 jobs:
   build:
@@ -20,19 +20,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
+    # Checkout the repo
+    - uses: actions/checkout@main
+    
+     # Setup .NET Core SDK
+    - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: ${{ env.DOTNET_VERSION }} 
+    
+     # Restore
     - name: Restore dependencies
       run: dotnet restore
+
+     # Build
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release
+
+     # Test
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+     # Publish
     - name: Publish
-      run: dotnet publish -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/minimalapi'
+      run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      
+     # Artefacts
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
@@ -45,4 +58,4 @@ jobs:
       with: 
         app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
-        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/minimalapi'
+        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
