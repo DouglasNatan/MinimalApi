@@ -50,7 +50,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: artifact
-        path: MinimalApi/myapp/**
+        path: myapp/
         if-no-files-found: error
 
     # Deploy to Azure Web apps
