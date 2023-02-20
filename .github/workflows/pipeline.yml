@@ -97,7 +97,7 @@ jobs:
 
     # Docker Run Container Azure
     - name: 'Deploy to Azure Web App for Container'
-      uses: Azure/webapps-container-deploy@v2
+      uses: Azure/webapps-container-deploy@v1
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME_CONTAINER }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_CONTAINER }}
