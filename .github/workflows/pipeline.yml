@@ -11,6 +11,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: douglasnatanminimalapi   # set this to your application's name
+  AZURE_WEBAPP_NAME_CONTAINER: douglasnatanminimalapicontainer   # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '7.0.x'           # set this to the dot net version to use
 
@@ -60,3 +61,44 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
         package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+    
+    # Docker Push Image
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USR}}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USR }}/minimalapi:latest
+
+    # Azure Login
+    #- name: Install Azure cli
+    #  run: |
+    #    sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
+    #    curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+    #    AZ_REPO=$(lsb_release -cs)
+    #    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+    #    sudo apt-get update
+    #    sudo apt-get install azure-cli
+
+    - name: Azure Login para Deployment
+      uses: azure/login@v1.1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+
+    # Docker Run Container Azure
+    - name: 'Deploy to Azure Web App for Container'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{env.AZURE_WEBAPP_NAME_CONTAINER}}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_CONTAINER }}
+        images: 'douglassoares/minimalapi:${{ github.sha }}'
