@@ -99,6 +99,12 @@ void MapActions(WebApplication app)
 {
     app.MapGet("/", () => "Hello World! Esta é um API minimalista!!!").ExcludeFromDescription();    
 
+    app.MapGet("/teste", () => "A Api está funcionando bem!!!")
+      .Produces(StatusCodes.Status200OK)
+      .Produces(StatusCodes.Status400BadRequest)
+      .WithName("TesteRequest")
+      .WithTags("Teste");
+
     app.MapPost("/registro", [AllowAnonymous] async (
         SignInManager<IdentityUser> signInManager,
         UserManager<IdentityUser> userManager,
