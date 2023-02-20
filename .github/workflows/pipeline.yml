@@ -90,13 +90,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install azure-cli
 
-    - name: Upload to blob storage
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.30.0
-        inlineScript: |
-            az storage blob upload-batch 
-
     - name: Azure Login
       uses: azure/login@v1
       with:
