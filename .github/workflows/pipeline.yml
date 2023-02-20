@@ -90,10 +90,17 @@ jobs:
         sudo apt-get update
         sudo apt-get install azure-cli
 
-    - name: Azure Login
-      uses: azure/actions/login@v1
+    - name: Upload to blob storage
+      uses: azure/CLI@v1
       with:
-        credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        azcliversion: 2.30.0
+        inlineScript: |
+            az storage blob upload-batch 
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     # Docker Run Container Azure
     - name: 'Deploy to Azure Web App for Container'
