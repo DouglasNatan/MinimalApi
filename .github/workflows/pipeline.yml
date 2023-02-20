@@ -93,7 +93,7 @@ jobs:
     - name: Azure Login para Deployment
       uses: azure/login@v1.1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{secrets.AZURE_CREDENTIALS}}
 
     # Docker Run Container Azure
     - name: 'Deploy to Azure Web App for Container'
