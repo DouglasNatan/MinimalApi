@@ -43,7 +43,7 @@ jobs:
 
      # Publish
     - name: Publish
-      run: dotnet publish MinimalApi/MinimalPilot.csproj -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      run: dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
       
      # Artefacts
     - name: Upload Artifact
